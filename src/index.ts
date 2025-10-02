@@ -32,6 +32,42 @@ app.post("/clients", async (req: Request, res: Response) => {
   }
 });
 
+// PUT /clients/:id
+app.put("/clients/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { name, birthDate, active } = req.body as {
+      name?: string;
+      birthDate?: string | null;
+      active?: boolean;
+    };
+    const client = await prisma.client.update({
+      where: { id },
+      data: {
+        ...(name !== undefined ? { name } : {}),
+        ...(birthDate !== undefined
+          ? { birthDate: birthDate ? new Date(birthDate) : null }
+          : {}),
+        ...(active !== undefined ? { active } : {}),
+      },
+    });
+    res.json(client);
+  } catch {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+
+// DELETE /clients/:id
+app.delete("/clients/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    await prisma.client.delete({ where: { id } });
+    res.status(204).end();
+  } catch {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+
 // listar clientes
 app.get("/clients", async (_req: Request, res: Response) => {
   const list = await prisma.client.findMany({ orderBy: { id: "desc" } });
