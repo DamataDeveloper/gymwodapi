@@ -76,3 +76,16 @@ app.get("/clients", async (_req: Request, res: Response) => {
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`API on http://localhost:${port}`));
+
+// GET /clients/:id  (debug: verificar se o ID existe)
+app.get("/clients/:id", async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const client = await prisma.client.findUnique({ where: { id } });
+    if (!client)
+      return res.status(404).json({ error: "Cliente não encontrado" });
+    res.json(client);
+  } catch {
+    res.status(400).json({ error: "Erro ao buscar cliente" });
+  }
+});
