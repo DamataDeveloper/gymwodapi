@@ -75,9 +75,6 @@ app.get("/clients", async (_req: Request, res: Response) => {
   res.json(list);
 });
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`API on http://localhost:${port}`));
-
 // GET /clients/:id  (debug: verificar se o ID existe)
 app.get("/clients/:id", async (req: Request, res: Response) => {
   try {
@@ -90,3 +87,6 @@ app.get("/clients/:id", async (req: Request, res: Response) => {
     res.status(400).json({ error: "Erro ao buscar cliente" });
   }
 });
+
+const port = process.env.PORT || 4000;
+app.listen(port, () => console.log(`API on http://localhost:${port}`));
