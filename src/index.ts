@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 import { prisma } from "./prisma";
 import type { Request, Response } from "express";
 import express = require("express");
